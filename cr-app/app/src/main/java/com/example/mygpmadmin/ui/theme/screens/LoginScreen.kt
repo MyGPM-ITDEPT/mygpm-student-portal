@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Badge
-import androidx.compose.material.icons.filled.Group
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
@@ -51,6 +50,10 @@ import com.example.mygpmadmin.ui.theme.MyGPMBlue
 import com.example.mygpmadmin.ui.theme.MyGPMDeepBlue
 import com.example.mygpmadmin.ui.theme.MyGPMText
 
+private val MyGPMErrorBackground = Color(0xFFFFEDED)
+private val MyGPMErrorBorder = Color(0xFFE8A8A8)
+private val MyGPMErrorText = Color(0xFF9B3D3D)
+
 @Composable
 fun LoginScreen(navController: NavController) {
 
@@ -65,6 +68,16 @@ fun LoginScreen(navController: NavController) {
     var loginAsFaculty by remember {
         mutableStateOf(true)
     }
+
+    // Validation errors
+    var usernameError by remember {
+        mutableStateOf("")
+    }
+
+    var passwordError by remember {
+        mutableStateOf("")
+    }
+
 
     Box(
         modifier = Modifier
@@ -140,14 +153,16 @@ fun LoginScreen(navController: NavController) {
             // =================================================
 
             Text(
-                modifier = Modifier.offset(y=75.dp),
+                modifier = Modifier.offset(y = 75.dp),
                 text = "MyGPM Admin",
                 fontSize = 38.sp,
                 fontWeight = FontWeight.ExtraBold,
                 color = MyGPMDeepBlue
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(
+                modifier = Modifier.height(8.dp)
+            )
 
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -155,6 +170,7 @@ fun LoginScreen(navController: NavController) {
                     .padding(horizontal = 5.dp)
                     .offset(y = 75.dp)
             ) {
+
                 HorizontalDivider(
                     modifier = Modifier.width(35.dp),
                     thickness = 1.dp,
@@ -166,8 +182,9 @@ fun LoginScreen(navController: NavController) {
                     fontSize = 13.sp,
                     fontWeight = FontWeight.Medium,
                     color = MyGPMText.copy(alpha = 0.7f),
-                    modifier = Modifier.padding(horizontal = 8.dp)
-                        .offset(y=(-7).dp)
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp)
+                        .offset(y = (-7).dp)
                 )
 
                 HorizontalDivider(
@@ -177,7 +194,9 @@ fun LoginScreen(navController: NavController) {
                 )
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(
+                modifier = Modifier.height(20.dp)
+            )
 
 
             // =================================================
@@ -191,7 +210,10 @@ fun LoginScreen(navController: NavController) {
                     .clip(RoundedCornerShape(28.dp))
                     .background(Color.White.copy(alpha = 0.45f))
                     .border(
-                        BorderStroke(1.dp, Color.White.copy(alpha = 0.5f)),
+                        BorderStroke(
+                            1.dp,
+                            Color.White.copy(alpha = 0.5f)
+                        ),
                         RoundedCornerShape(28.dp)
                     )
                     .padding(
@@ -202,13 +224,15 @@ fun LoginScreen(navController: NavController) {
             ) {
 
                 Text(
-                    text = "Sign in to continue",
+                    text = "Log in to continue",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     color = MyGPMDeepBlue
                 )
 
-                Spacer(modifier = Modifier.height(28.dp))
+                Spacer(
+                    modifier = Modifier.height(28.dp)
+                )
 
 
                 // =================================================
@@ -225,9 +249,12 @@ fun LoginScreen(navController: NavController) {
                         .padding(4.dp)
                 ) {
 
+                    // FACULTY
                     Button(
                         onClick = {
                             loginAsFaculty = true
+                            usernameError = ""
+                            passwordError = ""
                         },
                         modifier = Modifier
                             .weight(1f)
@@ -249,12 +276,17 @@ fun LoginScreen(navController: NavController) {
                             defaultElevation = 0.dp
                         )
                     ) {
+
                         Icon(
                             imageVector = Icons.Default.Person,
                             contentDescription = null,
                             modifier = Modifier.size(18.dp)
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Spacer(
+                            modifier = Modifier.width(8.dp)
+                        )
+
                         Text(
                             text = "Faculty",
                             fontSize = 15.sp,
@@ -262,11 +294,18 @@ fun LoginScreen(navController: NavController) {
                         )
                     }
 
-                    Spacer(modifier = Modifier.width(4.dp))
 
+                    Spacer(
+                        modifier = Modifier.width(4.dp)
+                    )
+
+
+                    // CR
                     Button(
                         onClick = {
                             loginAsFaculty = false
+                            usernameError = ""
+                            passwordError = ""
                         },
                         modifier = Modifier
                             .weight(1f)
@@ -288,12 +327,17 @@ fun LoginScreen(navController: NavController) {
                             defaultElevation = 0.dp
                         )
                     ) {
+
                         Icon(
                             imageVector = Icons.Default.Badge,
                             contentDescription = null,
                             modifier = Modifier.size(18.dp)
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+
+                        Spacer(
+                            modifier = Modifier.width(8.dp)
+                        )
+
                         Text(
                             text = "CR",
                             fontSize = 15.sp,
@@ -302,7 +346,9 @@ fun LoginScreen(navController: NavController) {
                     }
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(
+                    modifier = Modifier.height(24.dp)
+                )
 
 
                 // =================================================
@@ -313,10 +359,14 @@ fun LoginScreen(navController: NavController) {
                     value = username,
                     onValueChange = {
                         username = it
+                        usernameError = ""
                     },
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = {
-                        Text("Username / ID", color = MyGPMText.copy(alpha = 0.5f))
+                        Text(
+                            "Username / ID",
+                            color = MyGPMText.copy(alpha = 0.5f)
+                        )
                     },
                     leadingIcon = {
                         Icon(
@@ -326,17 +376,46 @@ fun LoginScreen(navController: NavController) {
                         )
                     },
                     singleLine = true,
+                    isError = usernameError.isNotEmpty(),
+                    supportingText = {
+                        if (usernameError.isNotEmpty()) {
+                            Text(
+                                text = usernameError
+                            )
+                        }
+                    },
                     shape = RoundedCornerShape(16.dp),
                     colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedIndicatorColor = MyGPMDeepBlue,
-                        unfocusedIndicatorColor = MyGPMDeepBlue.copy(alpha = 0.3f),
+                        focusedTextColor = MyGPMText,
+                        unfocusedTextColor = MyGPMText,
+                        errorContainerColor = MyGPMErrorBackground,
+                        focusedContainerColor = if (usernameError.isNotEmpty()) {
+                            MyGPMErrorBackground
+                        } else {
+                            Color.Transparent
+                        },
+                        unfocusedContainerColor = if (usernameError.isNotEmpty()) {
+                            MyGPMErrorBackground
+                        } else {
+                            Color.Transparent
+                        },
+                        focusedIndicatorColor = if (usernameError.isNotEmpty()) {
+                            MyGPMErrorBorder
+                        } else {
+                            MyGPMDeepBlue
+                        },
+                        unfocusedIndicatorColor = if (usernameError.isNotEmpty()) {
+                            MyGPMErrorBorder
+                        } else {
+                            MyGPMDeepBlue.copy(alpha = 0.3f)
+                        },
                         cursorColor = MyGPMDeepBlue
                     )
                 )
 
-                Spacer(modifier = Modifier.height(18.dp))
+                Spacer(
+                    modifier = Modifier.height(18.dp)
+                )
 
 
                 // =================================================
@@ -347,10 +426,14 @@ fun LoginScreen(navController: NavController) {
                     value = password,
                     onValueChange = {
                         password = it
+                        passwordError = ""
                     },
                     modifier = Modifier.fillMaxWidth(),
                     placeholder = {
-                        Text("Password", color = MyGPMText.copy(alpha = 0.5f))
+                        Text(
+                            "Password",
+                            color = MyGPMText.copy(alpha = 0.5f)
+                        )
                     },
                     leadingIcon = {
                         Icon(
@@ -361,17 +444,46 @@ fun LoginScreen(navController: NavController) {
                     },
                     singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
+                    isError = passwordError.isNotEmpty(),
+                    supportingText = {
+                        if (passwordError.isNotEmpty()) {
+                            Text(
+                                text = passwordError
+                            )
+                        }
+                    },
                     shape = RoundedCornerShape(16.dp),
                     colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedIndicatorColor = MyGPMDeepBlue,
-                        unfocusedIndicatorColor = MyGPMDeepBlue.copy(alpha = 0.3f),
+                        focusedTextColor = MyGPMText,
+                        unfocusedTextColor = MyGPMText,
+                        errorContainerColor = MyGPMErrorBackground,
+                        focusedContainerColor = if (usernameError.isNotEmpty()) {
+                            MyGPMErrorBackground
+                        } else {
+                            Color.Transparent
+                        },
+                        unfocusedContainerColor = if (usernameError.isNotEmpty()) {
+                            MyGPMErrorBackground
+                        } else {
+                            Color.Transparent
+                        },
+                        focusedIndicatorColor = if (usernameError.isNotEmpty()) {
+                            MyGPMErrorBorder
+                        } else {
+                            MyGPMDeepBlue
+                        },
+                        unfocusedIndicatorColor = if (usernameError.isNotEmpty()) {
+                            MyGPMErrorBorder
+                        } else {
+                            MyGPMDeepBlue.copy(alpha = 0.3f)
+                        },
                         cursorColor = MyGPMDeepBlue
                     )
                 )
 
-                Spacer(modifier = Modifier.height(28.dp))
+                Spacer(
+                    modifier = Modifier.height(28.dp)
+                )
 
 
                 // =================================================
@@ -381,12 +493,81 @@ fun LoginScreen(navController: NavController) {
                 Button(
                     onClick = {
 
-                        if (loginAsFaculty) {
-                            navController.navigate("teacher_dashboard")
-                        } else {
-                            navController.navigate("cr_dashboard")
+                        usernameError = ""
+                        passwordError = ""
+
+                        val enteredUsername = username.trim()
+                        val enteredPassword = password.trim()
+
+                        // -----------------------------------------
+                        // PASSWORD VALIDATION
+                        // -----------------------------------------
+
+                        if (enteredPassword.isEmpty()) {
+                            passwordError = "Please enter your password."
+                        } else if (enteredPassword != "12345") {
+                            passwordError = "Incorrect password."
                         }
 
+
+                        // -----------------------------------------
+                        // USERNAME VALIDATION
+                        // -----------------------------------------
+
+                        if (enteredUsername.isEmpty()) {
+
+                            usernameError = "Please enter your username."
+
+                        } else {
+
+                            if (loginAsFaculty) {
+
+                                // Faculty username example:
+                                // dipaligosavi@itteacher
+
+                                val facultyUsernameRegex =
+                                    Regex("^[A-Za-z]+@itteacher$")
+
+                                if (!facultyUsernameRegex.matches(enteredUsername)) {
+                                    usernameError =
+                                        "Enter a valid faculty username."
+                                }
+
+                            } else {
+
+                                // CR username example:
+                                // SM24IF001@gpm.ac.in
+                                //
+                                // Uppercase/lowercase both accepted.
+
+                                val crUsernameRegex =
+                                    Regex("^[A-Za-z]{2}\\d{2}[A-Za-z]{2}\\d{3}@gpm\\.ac\\.in$")
+
+                                if (!crUsernameRegex.matches(enteredUsername)) {
+                                    usernameError =
+                                        "Enter a valid enrollment-based username."
+                                }
+                            }
+                        }
+
+
+                        // -----------------------------------------
+                        // CURRENT NAVIGATION
+                        // -----------------------------------------
+
+                        if (
+                            usernameError.isEmpty() &&
+                            passwordError.isEmpty()
+                        ) {
+
+                            if (loginAsFaculty) {
+                                navController.navigate(
+                                    "teacher_profile/${java.net.URLEncoder.encode(username, "UTF-8")}"
+                                )
+                            } else {
+                                navController.navigate("cr_profile")
+                            }
+                        }
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -398,7 +579,7 @@ fun LoginScreen(navController: NavController) {
                 ) {
 
                     Text(
-                        text = "Sign In",
+                        text = "Log In",
                         color = Color.White,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
@@ -411,7 +592,9 @@ fun LoginScreen(navController: NavController) {
             // FOOTER
             // =================================================
 
-            Spacer(modifier = Modifier.height(17.dp))
-
+            Spacer(
+                modifier = Modifier.height(17.dp)
+            )
         }
-    } }
+    }
+}
